@@ -1,0 +1,7 @@
+/target
+/build
+/worker
+.wrangler
+.dev.vars
+.DS_Store
+Cargo.lock

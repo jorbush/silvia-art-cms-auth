@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "silvia-art-cms-auth",
+  "main": "build/worker/shim.mjs",
+  "compatibility_date": "2025-01-01",
+  "build": {
+    "command": "cargo install -q worker-build && worker-build --release"
+  },
+  "vars": {
+    "ALLOWED_ORIGIN": "https://jorbush.github.io"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
