@@ -10,7 +10,7 @@ use crate::oauth::{
 };
 
 fn cors_headers(allowed_origin: &str) -> Result<Headers> {
-    let mut headers = Headers::new();
+    let headers = Headers::new();
     headers.set("Access-Control-Allow-Origin", allowed_origin)?;
     headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")?;
     headers.set(
@@ -29,7 +29,7 @@ fn html_response(
     let body = render_oauth_html(status_label, payload, allowed_origin)
         .map_err(|e| Error::RustError(format!("Failed to serialize OAuth payload: {e}")))?;
 
-    let mut headers = cors_headers(allowed_origin)?;
+    let headers = cors_headers(allowed_origin)?;
     headers.set("Content-Type", "text/html; charset=utf-8")?;
     if clear_cookie {
         headers.append("Set-Cookie", clear_state_cookie())?;
@@ -71,7 +71,7 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
                 service: "silvia-art-cms-auth",
             })
             .map_err(|e| Error::RustError(e.to_string()))?;
-            let mut headers = cors_headers(&allowed_origin)?;
+            let headers = cors_headers(&allowed_origin)?;
             headers.set("Content-Type", "application/json")?;
             Ok(Response::ok(body)?.with_headers(headers))
         }
@@ -98,7 +98,7 @@ fn handle_auth(url: &Url, env: &Env) -> Result<Response> {
     let authorize_url = build_github_authorize_url(&client_id, &redirect_uri, &scope, &state)
         .map_err(|e| Error::RustError(format!("Invalid GitHub authorize URL: {e}")))?;
 
-    let mut headers = Headers::new();
+    let headers = Headers::new();
     headers.set("Location", &authorize_url)?;
     headers.append("Set-Cookie", &build_state_cookie(&state))?;
 
@@ -174,7 +174,7 @@ async fn handle_callback(
     let json_body = serde_json::to_string(&payload)
         .map_err(|e| Error::RustError(format!("Serialization error: {e}")))?;
 
-    let mut req_headers = Headers::new();
+    let req_headers = Headers::new();
     req_headers.set("Content-Type", "application/json")?;
     req_headers.set("Accept", "application/json")?;
     req_headers.set("User-Agent", "silvia-art-cms-auth")?;
